@@ -5,30 +5,21 @@ import './timer.css';
 
 
 export default class Timers extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      timers: [{}],
-      currentClock: null,
-      currentDescription: '',
-      currentTimout: null
-    };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.addTimer = this.addTimer.bind(this);
-    this.go = this.go.bind(this);
-    this.stop = this.stop.bind(this);
-    this.duration = this.duration.bind(this);
+  state = {
+    timers: [{}],
+    currentClock: null,
+    currentDescription: '',
+    currentTimout: null
   }
 
-  handleChange(i, event) {
+  handleChange = (i, event) => {
     const name = event.target.name;
     const timers = this.state.timers.slice();
     timers[i][name] = event.target.value;
     this.setState({timers: timers});
   }
 
-  addTimer(event) {
+  addTimer = (event) => {
     event.preventDefault();
 
     const lastTimer = this.state.timers[this.state.timers.length-1];
@@ -45,7 +36,7 @@ export default class Timers extends React.Component {
     });
   }
 
-  tick(i, time) {
+  tick = (i, time) => {
     if (time-1 <= 0) {
       var timeout = setTimeout(() => this.go(i+1), 1000);
     } else {
@@ -58,7 +49,7 @@ export default class Timers extends React.Component {
     })
   }
 
-  displayClock(timeInSeconds) {
+  displayClock = (timeInSeconds) => {
     const hours = Math.floor(timeInSeconds / 3600);
     const minutes = Math.floor(timeInSeconds % 3600 / 60);
     const seconds = Math.floor(timeInSeconds % 3600 % 60);
@@ -68,7 +59,7 @@ export default class Timers extends React.Component {
     return `${zeroPad(hours)}:${zeroPad(minutes)}:${zeroPad(seconds)}`;
   }
 
-  go(i) {
+  go = (i) => {
     this.stop();
     if (i < this.state.timers.length) {
       const timer = this.state.timers[i];
@@ -87,7 +78,7 @@ export default class Timers extends React.Component {
     }
   }
 
-  stop() {
+  stop = () => {
     clearTimeout(this.state.currentTimout);
     this.setState({
       currentClock: null,
@@ -97,7 +88,7 @@ export default class Timers extends React.Component {
   }
 
   // Convert hours/minutes/seconds to seconds
-  duration(i) {
+  duration = (i) => {
     const hours = parseInt(this.state.timers[i].hours, 10) || 0;
     const minutes = parseInt(this.state.timers[i].minutes, 10) || 0;
     const seconds = parseInt(this.state.timers[i].seconds, 10) || 0;
@@ -117,7 +108,8 @@ export default class Timers extends React.Component {
                   order={i}
                   handleChange={this.handleChange}
                   nextTimer={this.addTimer} 
-                  last={i === timers.length-1} />
+                  last={i === timers.length-1} 
+                />
               );
             }
           )}
