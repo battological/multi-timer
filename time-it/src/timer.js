@@ -1,13 +1,8 @@
 import React from 'react';
 
 export default class Timer extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(event) {
+  handleChange = (event) => {
     this.props.handleChange(this.props.order, event);
   }
 
