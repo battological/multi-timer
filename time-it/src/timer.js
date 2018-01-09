@@ -13,36 +13,44 @@ export default class Timer extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.props.nextTimer}>
-        <label>
-          Description:
+      <form onSubmit={this.props.nextTimer} className='timer form-inline'>
+        <div id='description' className='timer-component form-group'>
           <input
             type='text'
             autoFocus
+            placeholder='Description'
             name='description'
-            onChange={this.handleChange} />
-        </label>
+            onChange={this.handleChange} 
+            className='form-control' />
+        </div>
 
-        <label>
-          Duration:
-          <input
-            type='number'
+        <div id='duration' className='timer-component form-group'>
+          <select
             name='hours'
-            placeholder='hours'
-            onChange={this.handleChange} />:
-          <input
-            type='number'
-            name='minutes'
-            placeholder='minutes'
-            onChange={this.handleChange} />:
-          <input
-            type='number'
-            name='seconds'
-            placeholder='seconds'
-            onChange={this.handleChange} />
-        </label>
+            onChange={this.handleChange} 
+            className='form-control custom-select'>
+            <option value='0'>Hours</option>
+            {Array.from(new Array(100), (e, i) => <option key={i} value={i}>{i}</option>)}
+          </select>
 
-        <button type='submit'>+</button>
+          <select
+            name='minutes'
+            onChange={this.handleChange} 
+            className='form-control custom-select'>
+            <option value='0'>Minutes</option>
+            {Array.from(new Array(60), (e, i) => <option key={i} value={i}>{i}</option>)}
+          </select>
+
+          <select
+            name='seconds'
+            onChange={this.handleChange} 
+            className='form-control custom-select'>
+            <option value='0'>Seconds</option>
+            {Array.from(new Array(60), (e, i) => <option key={i} value={i}>{i}</option>)}
+          </select>
+        </div>
+
+        {<button id='add-timer' className='btn btn-primary' type='submit'>+</button>}
       </form>
     )
   }

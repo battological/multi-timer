@@ -8,11 +8,7 @@ export default class Timers extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      timers: [
-        {
-          description: ''
-        }
-      ],
+      timers: [{}],
       currentClock: null,
       currentDescription: '',
       currentTimout: null
@@ -35,6 +31,11 @@ export default class Timers extends React.Component {
   addTimer(event) {
     event.preventDefault();
 
+    const lastTimer = this.state.timers[this.state.timers.length-1];
+    if (!lastTimer.hasOwnProperty('hours') && !lastTimer.hasOwnProperty('minutes') && !lastTimer.hasOwnProperty('seconds')) {
+      return;
+    }
+
     const timers = this.state.timers.slice();
 
     timers.push({});
@@ -48,7 +49,7 @@ export default class Timers extends React.Component {
     if (time-1 <= 0) {
       var timeout = setTimeout(() => this.go(i+1), 1000);
     } else {
-      var timeout = setTimeout(() => this.tick(i, time-1), 1000);
+      timeout = setTimeout(() => this.tick(i, time-1), 1000);
     }
 
     this.setState({
@@ -97,38 +98,39 @@ export default class Timers extends React.Component {
 
   // Convert hours/minutes/seconds to seconds
   duration(i) {
-    const hours = this.state.timers[i].hours || 0;
-    const minutes = this.state.timers[i].minutes || 0;
-    const seconds = this.state.timers[i].seconds || 0;
+    const hours = parseInt(this.state.timers[i].hours, 10) || 0;
+    const minutes = parseInt(this.state.timers[i].minutes, 10) || 0;
+    const seconds = parseInt(this.state.timers[i].seconds, 10) || 0;
 
-    return hours*60*60 + minutes*60 + seconds;
+    return hours*3600 + minutes*60 + seconds;
   }
 
   render() {
     return (
-      <div>
+      <div id='interface'>
         <div id='timers'>
           {this.state.timers.map(
-            (timer, i) => {
+            (timer, i, timers) => {
               return (
                 <Timer
                   key={i}
                   order={i}
                   handleChange={this.handleChange}
-                  nextTimer={this.addTimer} />
+                  nextTimer={this.addTimer} 
+                  last={i === timers.length-1} />
               );
             }
           )}
         </div>
 
         <div id='controls'>
-          <button onClick={() => this.go(0)}>Go!</button>
-          <button onClick={() => this.stop()}>Cancel</button>
+          <button type='button' className='btn btn-primary' onClick={() => this.go(0)}>Go!</button>
+          <button type='button' className='btn btn-secondary' onClick={() => this.stop()}>Cancel</button>
         </div>
 
         <div id='current'>
-          <span id='description'>{this.state.currentDescription}</span>
-          <span id='clock'>{this.state.currentClock}</span>
+          <div id='description'>{this.state.currentDescription}</div>
+          <div id='clock'>{this.state.currentClock}</div>
         </div>
       </div>
     )
